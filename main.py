@@ -14,30 +14,7 @@ invalid_images = []
 
 def classify(pbar, pbar_label):
     ## IMPLEMENT NUDENY API HERE
-    global file_array
-    global nude_images
-    global sexy_images
-    global safe_images
-    global invalid_images
-
-    classify = Classify()
-    response = classify.imageClassify(paths=file_array)
-    # print(response['Prediction'])
-
-    for index, prediction in enumerate(response['Prediction']):
-        if prediction['class'] == 'nude':
-            nude_images.append(file_array[index])
-        elif prediction['class'] == 'sexy':
-            sexy_images.append(file_array[index])
-        elif prediction['class'] == 'safe':
-            safe_images.append(file_array[index])
-        elif prediction['class'] == 'invalid':
-            invalid_images.append(file_array[index])
-
-    nude_count.set(len(nude_images))
-    sexy_count.set(len(sexy_images))
-    safe_count.set(len(sexy_images))
-    invalid_count.set(len(invalid_images))
+    print('classify')
 
     ## PROGRESS BAR
     pbar.stop()
@@ -46,27 +23,7 @@ def classify(pbar, pbar_label):
 
 def censor(pbar,pbar_label):
     ## IMPLEMENT NUDENY API HERE
-    global nude_images
-
-    if len(nude_images) == 0:
-        messagebox.showerror(message="There's no nude image to censor")
-        pbar.stop()
-        pbar.grid_forget()
-        pbar_label.grid_forget()
-        return
-
-    detect = Detect()
-    try:
-        response = detect.censorExposed(paths=nude_images, save_path=str(SAVE_DIR.get()))   
-    except Exception as e:
-        messagebox.showerror(message=str(e))
-
-    # Without save_path
-    # try:
-    #     response = detect.censorExposed(paths=nude_images)
-    #     print(response)   
-    # except Exception as e:
-    #     messagebox.showerror(message=str(e))
+    print("censor")
     
 
     ## PROGRESS BAR
@@ -76,18 +33,7 @@ def censor(pbar,pbar_label):
 
 def delete():
     ## IMPLEMENT NUDENY API HERE
-    global nude_images
-
-    if len(nude_images) == 0:
-        messagebox.showerror(message="There's no nude image to delete")
-        return
-
-    for nude_image in nude_images:
-        try:
-            os.remove(nude_image)
-            print(f"File {nude_image} has been deleted")
-        except Exception as e:
-            print(f"Error deleting file {nude_image}: {str(e)}")
+    print('delete')
 
 def classify_button_click():
     pbar = ttk.Progressbar(mainframe, orient=HORIZONTAL, length=400, mode='indeterminate')
@@ -108,7 +54,6 @@ def censor_button_click():
     thread = threading.Thread(target=censor, args=(pbar,pbar_label,))
     thread.start()
     pbar.start(10)
-
 
 def get_dir():
     DIR.set(filedialog.askdirectory())
@@ -197,34 +142,4 @@ ttk.Button(mainframe, text="Delete", padding="70 30", style="Delete.TButton", co
 
 root.mainloop()
 
-
-
-
-# mainframe = widget.Frame(root, padding="100 100 100 0")
-# mainframe.grid(column=0, row=0)
-# root.columnconfigure(0, weight=1)
-# root.rowconfigure(0, weight=1)
-
-# feet = StringVar()
-# feet_entry = widget.Entry(mainframe, width=7, textvariable=feet)
-# feet_entry.grid(column=1, row=5)
-
-# meters = StringVar()
-# test = widget.Label(mainframe, textvariable=meters)
-# test.grid(column=1, row=2, sticky=(W, E))
-
-
-# widget.Button(mainframe, text="Calculate", command=calculate).grid(column=3, row=3, sticky=W)
-
-# widget.Label(mainframe, text="feet").grid(column=3, row=1, sticky=W)
-# widget.Label(mainframe, text="is equivalent to").grid(column=0, row=2, sticky=E)
-# widget.Label(mainframe, text="meters").grid(column=3, row=2, sticky=W)
-
-# for child in mainframe.winfo_children(): 
-#     child.grid_configure(padx=10, pady=10)
-
-# feet_entry.focus()
-# root.bind("<Return>", calculate)
-
-# root.mainloop()
 
